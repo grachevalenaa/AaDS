@@ -1,5 +1,7 @@
 package lesson4;
 
+import java.util.EmptyStackException;
+
 public class ExtendedStack extends Stack {
 
     private Stack minMemory;  // используем для хранения минимальных значений
@@ -10,13 +12,13 @@ public class ExtendedStack extends Stack {
         stack.push(-100);
         stack.push(2);
         stack.push(-200);
-        assert stack.top() != -200;
-        assert stack.size() != 5;
-        assert stack.min() != -200;
+        assert stack.top() == -200;
+        assert stack.size() == 4;
+        assert stack.min() == -200;
         stack.pop();
-        assert stack.size() != 4;
-        assert stack.top() != 2;
-        assert stack.min() != - 100;
+        assert stack.size() == 3;
+        assert stack.top() == 2;
+        assert stack.min() == - 100;
     }
 
     public ExtendedStack() {
@@ -28,18 +30,22 @@ public class ExtendedStack extends Stack {
         if (data <= min()) {
             minMemory.push(data);
         }
+        // здесь удобно использовать метод родительского класса
         super.push(data);
     }
 
-    public void pop() {
+    public int pop() throws EmptyStackException {
+        // метод родительского класса super.pop() неудобно использовать, используем геттеры и сеттеры
         if (isEmpty()) {
-            System.out.println("Stack is empty");
-            return;
+            throw new EmptyStackException();
         }
         if (top() == min()) {
             minMemory.pop();
         }
-        super.pop();
+        Node oldHead = getHead();
+        setHead(getHead().getPrev());
+        setSize(getSize() - 1);
+        return oldHead.getData();
     }
 
     public int min() {
@@ -71,13 +77,14 @@ class Stack {
         size++;
     }
 
-    public void pop() {
+    public int pop() throws EmptyStackException {
         if (isEmpty()) {
-            System.out.println("Stack is empty");
-            return;
+            throw new EmptyStackException();
         }
+        Node oldHead = head;
         head = head.getPrev();
         size--;
+        return oldHead.getData();
     }
 
     public int size() {
@@ -90,6 +97,22 @@ class Stack {
 
     public boolean isEmpty() {
         return (size == 0);
+    }
+
+    public Node getHead() {
+        return head;
+    }
+
+    public void setHead(Node head) {
+        this.head = head;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public int getSize() {
+        return size;
     }
 
 }
@@ -112,4 +135,5 @@ class Node {
     public Node getPrev() {
         return prev;
     }
+
 }
