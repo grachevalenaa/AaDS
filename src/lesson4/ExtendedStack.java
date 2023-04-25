@@ -48,8 +48,11 @@ public class ExtendedStack extends Stack {
         }
         return minMemory.top();
     }
+
 }
+
 class Stack {
+
     private Node head;  // верхний элемент стэка (top)
 
     private int size = 0;  // изначально размер стэка равен 0
@@ -60,13 +63,11 @@ class Stack {
 
     public void push(int data) {
         if (isEmpty()) {
-            head = new Node(data, null, null);
+            head = new Node(data, null);
             size++;
             return;
         }
-        Node newHead = new Node(data, null, head);
-        head.setNext(newHead);
-        head = newHead;
+        head = new Node(data, head);
         size++;
     }
 
@@ -76,7 +77,6 @@ class Stack {
             return;
         }
         head = head.getPrev();
-        head.setNext(null);
         size--;
     }
 
@@ -91,18 +91,17 @@ class Stack {
     public boolean isEmpty() {
         return (size == 0);
     }
+
 }
 
 class Node {
 
     private int data;
-    private Node next;
 
     private Node prev;
 
-    public Node(int data, Node next, Node prev) {
+    public Node(int data, Node prev) {
         this.data = data;
-        this.next = next;
         this.prev = prev;
     }
 
@@ -112,9 +111,5 @@ class Node {
 
     public Node getPrev() {
         return prev;
-    }
-
-    public void setNext(Node next) {
-        this.next = next;
     }
 }
