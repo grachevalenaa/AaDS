@@ -18,9 +18,13 @@ public class DynamicArray {
         assert array.get(0) == 10;
         assert array.get(4) == 0;
         assert array.size() == 5;
-        array.erase();
-        assert array.size() == 4;
-        assert array.get(4) == null;
+        try {
+            array.erase();
+            assert array.size() == 4;
+            assert array.get(4) == null;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public DynamicArray() {}
@@ -44,7 +48,10 @@ public class DynamicArray {
         size++;
     }
 
-    public void erase() {
+    public void erase() throws Exception {
+        if (isEmpty()) {
+            throw new Exception("Dynamic array is empty!");
+        }
         if (size < capacity / 4) {
             int[] newArr = new int[capacity / 2];
             for (int i = 0; i < size; ++i) {
@@ -63,6 +70,10 @@ public class DynamicArray {
             newArray[i] = elements[i];
         }
         elements = newArray;
+    }
+
+    public boolean isEmpty() {
+        return (size == 0);
     }
 
 }
