@@ -18,6 +18,9 @@ public class DynamicArray {
         assert array.get(0) == 10;
         assert array.get(4) == 0;
         assert array.size() == 5;
+        array.erase();
+        assert array.size() == 4;
+        assert array.get(4) == null;
     }
 
     public DynamicArray() {}
@@ -27,7 +30,7 @@ public class DynamicArray {
     }
 
     public Integer get(int i) {
-        if (i < 0 || i >= elements.length) {
+        if (i < 0 || i >= size) {
             return null;
         }
         return elements[i];
@@ -39,6 +42,18 @@ public class DynamicArray {
         }
         elements[size] = x;
         size++;
+    }
+
+    public void erase() {
+        if (size < capacity / 4) {
+            int[] newArr = new int[capacity / 2];
+            for (int i = 0; i < size; ++i) {
+                newArr[i] = elements[i];
+            }
+            size--;
+            return;
+        }
+        size--;
     }
 
     public void ensureCapacity() {
